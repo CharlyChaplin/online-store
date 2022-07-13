@@ -1,4 +1,5 @@
 import myDB from "../db.js";
+import models from "../models/models.js";
 
 
 const tryToConnectWidthDB = async () => {
