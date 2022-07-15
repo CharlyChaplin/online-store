@@ -75,7 +75,8 @@ Rating.belongsTo(Device);
 Device.hasOne(BasketDevice);
 BasketDevice.belongsTo(Device);
 
-Device.hasMany(DeviceInfo); //одна запись в Device содержит много записей с характеристиками в DeviceInfo
+//info находится в deviceController.js. Извлекается из req.body
+Device.hasMany(DeviceInfo, {as: 'info'}); //одна запись в Device содержит много записей с характеристиками в DeviceInfo
 DeviceInfo.belongsTo(Device);
 
 //могли бы обозначить связи "многие ко многим", но при такой связи создаётся промежуточная таблица,
@@ -89,7 +90,7 @@ Brand.belongsToMany(Type, { through: TypeBrand });
 
 
 
-export default {
+export {
 	User,
 	Basket,
 	BasketDevice,

@@ -1,10 +1,20 @@
+import { Type } from '../models/models.js';
+import ApiError from '../error/ApiError.js';
+
 class TypeController {
-	async create(req, res) {
-		res.status(200).json({message: `You body request: ${req.body.myBody}`});
+	async create(req, res, next) {
+		try {
+			const { name } = req.body;
+			const type = await Type.create({ name });
+			return res.json(type);
+		} catch (err) {
+			return next(ApiError.badRequest(err.message));
+		}
 	}
-	
+
 	async getAll(req, res) {
-		res.status(200).json({message: "Type getAll"});
+		const type = await Type.findAll();
+		res.json(type);
 	}
 }
 
