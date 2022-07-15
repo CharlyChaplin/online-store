@@ -20,7 +20,7 @@ class DeviceController {
 				typeId,
 				img: fileName
 			});
-			console.log('info = ', info)
+			
 			if (info) {
 				//когда данные вытягиваются из формы(в запросе), они передаются
 				//как строка. Поэтому парсим в объект
@@ -72,7 +72,6 @@ class DeviceController {
 				where: {id},
 				include: [{model: DeviceInfo, as: 'info'}]
 			})
-			console.log('device = ', device);
 			return res.json(device);
 
 		} catch (err) {
