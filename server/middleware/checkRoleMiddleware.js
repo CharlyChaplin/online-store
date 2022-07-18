@@ -14,8 +14,6 @@ export default (role) => {
 
 			const decoded = jwt.verify(token, SECRET_KEY);
 
-			console.log('DECODED.ROLE = ', decoded.role, 'ROLE = ', role);
-
 			if (decoded.role !== role) return res.json({ message: "Access denied" });
 
 			//добавим в запрос данные, которые были вытащены из токена
