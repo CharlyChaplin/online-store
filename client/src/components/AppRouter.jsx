@@ -1,26 +1,27 @@
-import Admin from 'pages/Admin';
-import Auth from 'pages/Auth';
-import Basket from 'pages/Basket';
-import DevicePage from 'pages/DevicePage';
-import Shop from 'pages/Shop';
-import Home from 'pages/Home';
+import NotFound from './NotFound';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Header from './Header';
+import { authRoutes, publicRoutes } from 'routes';
 
 
 const AppRouter = () => {
+	const isAuth = false;
+	
 	return (
 		<>
 			<Header />
-
 			<Routes>
-				<Route path ='/' element={<Home />} />
-				<Route path ='/admin' element={<Admin />} />
-				<Route path='/auth' element={<Auth />} />
-				<Route path='/basket' element={<Basket />} />
-				<Route path='/device' element={<DevicePage />} />
-				<Route path='/shop' element={<Shop />} />
+				{
+					isAuth
+						? authRoutes.map(({ path, element }) =>
+							<Route key={path} path={path} element={element} />
+						)
+						: publicRoutes.map(({ path, element }) =>
+							<Route key={path} path={path} element={element} />
+						)
+				}
+				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</>
 	);
