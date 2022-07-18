@@ -2,3 +2,6 @@ server/node_modules
 server/.env
 server/package-lock.json
 server/static
+
+client/node_modules
+client/package-lock.json
