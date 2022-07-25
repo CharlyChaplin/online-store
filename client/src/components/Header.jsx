@@ -2,8 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { fetchAuth, setAdmin, setAuth, setLogout } from 'redux/userSlice.js';
-import { LOGIN_ROUTE, SHOP_ROUTE, ADMIN_ROUTE } from '../utils/consts.js';
+import { LOGIN_ROUTE, SHOP_ROUTE, ADMIN_ROUTE, CART_ROUTE } from '../utils/consts.js';
 import jwt from 'jsonwebtoken';
+import cartICO from 'assets/img/cart.png';
+import { Image } from 'react-bootstrap';
 
 
 const Header = () => {
@@ -56,13 +58,24 @@ const Header = () => {
 				return (
 					<>
 						{
-							isAdmin && <button
-								type="button"
-								className="btn btn-outline-light"
-								onClick={() => navigate(ADMIN_ROUTE)}
-							>
-								Админ панель
-							</button>
+							isAdmin &&
+							<div className='d-flex align-items-center'>
+								<button
+									type="button"
+									className="btn btn-outline-light"
+									style={{marginRight: "10px"}}
+									onClick={() => navigate(ADMIN_ROUTE)}
+								>
+									Админ панель
+								</button>
+								<div
+									type="button"
+									style={{width: "36px", height: "36px"}}
+									onClick={() => navigate(CART_ROUTE)}
+								>
+									<Image src={cartICO} alt="Cart" />
+								</div>
+							</div>
 						}
 						<button type="button" className="btn btn-outline-light ms-4" onClick={logout}>Выйти</button>
 					</>
