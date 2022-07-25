@@ -3,11 +3,12 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { authRoutes, publicRoutes } from 'routes';
 import Header from './Header';
+import { useSelector } from 'react-redux';
 
 
 const AppRouter = () => {
-	const isAuth = false;
-	
+	const isAuth = useSelector(state => state.user.isAuth);
+
 	return (
 		<>
 			<Header />

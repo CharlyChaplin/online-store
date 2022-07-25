@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { fetchLogin, fetchRegistation, setAdmin, setAuth } from 'store/userSlice';
+import { fetchLogin, fetchRegistation, setAdmin, setAuth } from 'redux/userSlice.js';
 import { LOGIN_ROUTE, REGISTRATION_ROUTE } from 'utils/consts';
 import jwt from 'jsonwebtoken';
 

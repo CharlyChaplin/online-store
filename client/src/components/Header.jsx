@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { fetchAuth, setAdmin, setAuth, setLogout } from 'store/userSlice.js';
-import { LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts.js';
+import { fetchAuth, setAdmin, setAuth, setLogout } from 'redux/userSlice.js';
+import { LOGIN_ROUTE, SHOP_ROUTE, ADMIN_ROUTE } from '../utils/consts.js';
 import jwt from 'jsonwebtoken';
 
 
@@ -14,7 +13,6 @@ const Header = () => {
 	let token = '';
 
 	useEffect(() => {
-		console.log(isAuth);
 		if (isAuth) navigate(SHOP_ROUTE);
 	}, [isAuth, isAdmin]);
 
@@ -35,7 +33,6 @@ const Header = () => {
 		goAuth();
 	}, [token])
 
-
 	const login = () => {
 		navigate(LOGIN_ROUTE);
 	};
@@ -44,14 +41,14 @@ const Header = () => {
 		dispatch(setLogout());
 		dispatch(setAuth(false));
 		window.localStorage.removeItem('token');
-		navigate('/');
+		navigate(LOGIN_ROUTE);
 	}
 
 	const out = (isAuth, isLoading) => {
 		if (isLoading) {
 			return (
-				<div class="spinner-grow text-danger" role="status">
-					<span class="visually-hidden">Loading...</span>
+				<div className="spinner-grow text-danger" role="status">
+					<span className="visually-hidden">Loading...</span>
 				</div>
 			)
 		} else {
@@ -59,7 +56,13 @@ const Header = () => {
 				return (
 					<>
 						{
-							isAdmin && <button type="button" className="btn btn-outline-light">Админ панель</button>
+							isAdmin && <button
+								type="button"
+								className="btn btn-outline-light"
+								onClick={() => navigate(ADMIN_ROUTE)}
+							>
+								Админ панель
+							</button>
 						}
 						<button type="button" className="btn btn-outline-light ms-4" onClick={logout}>Выйти</button>
 					</>
@@ -78,16 +81,6 @@ const Header = () => {
 				<NavLink className="navbar-brand text-white" to={SHOP_ROUTE}>КупиДевайс</NavLink>
 				<div className="collapse navbar-collapse" id="navbarNav">
 					<ul className="navbar-nav" style={{ marginLeft: "auto" }}>
-						{/*{
-							isAuth
-								? <>
-									{
-										isAdmin && <button type="button" className="btn btn-outline-light">Админ панель</button>
-									}
-									<button type="button" className="btn btn-outline-light ms-4" onClick={logout}>Выйти</button>
-								</>
-								: <button type="button" className="btn btn-outline-light" onClick={login}>Авторизация</button>
-						}*/}
 						{myOut}
 					</ul>
 				</div>
