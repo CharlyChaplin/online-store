@@ -13,6 +13,9 @@ class DeviceController {
 			const dirname = getPath(import.meta.url);
 			img.mv(path.resolve(dirname, '..', 'static', fileName));
 
+			const id = await Device.max('id') + 1;
+			const resp = await Device.sequelize.query(`ALTER SEQUENCE devices_id_seq RESTART WITH ${id}`);
+			
 			const device = await Device.create({
 				name,
 				price,

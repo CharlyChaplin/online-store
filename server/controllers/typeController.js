@@ -5,6 +5,8 @@ class TypeController {
 	async create(req, res, next) {
 		try {
 			const { name } = req.body;
+			const id = await Type.max('id') + 1;
+			const resp = await Type.sequelize.query(`ALTER SEQUENCE types_id_seq RESTART WITH ${id}`);
 			const type = await Type.create({ name });
 			return res.json(type);
 		} catch (err) {

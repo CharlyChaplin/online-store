@@ -5,6 +5,8 @@ class BrandController {
 	async create(req, res, next) {
 		try {
 			const { name } = req.body;
+			const id = await Brand.max('id') + 1;
+			const resp = await Brand.sequelize.query(`ALTER SEQUENCE brands_id_seq RESTART WITH ${id}`);
 			const brand = await Brand.create({ name });
 			return res.json(brand);
 		} catch (err) {
