@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useEffect } from 'react';
 import { Form, Modal } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { createBrand, deleteBrand, getBrands } from 'redux/deviceSlice';
+import { useDispatch } from 'react-redux';
+import { createBrand, deleteBrand } from 'redux/deviceSlice';
 
 
 const CreateBrand = ({ show, onHide }) => {
@@ -23,7 +22,7 @@ const CreateBrand = ({ show, onHide }) => {
 		onHide();
 		const resp = await dispatch(deleteBrand(brand));
 		if (resp.payload.message) {
-			alert(resp?.payload.message);
+			alert(resp.payload.message);
 		} else {
 			alert(resp.payload)
 		}
@@ -32,12 +31,7 @@ const CreateBrand = ({ show, onHide }) => {
 
 	return (
 		<>
-			<Modal
-				show={show}
-				onHide={onHide}
-				centered
-				className="modal fade" id="BrandModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-			>
+			<Modal show={show} onHide={onHide} centered>
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">
@@ -50,6 +44,7 @@ const CreateBrand = ({ show, onHide }) => {
 									value={brand}
 									onChange={(e) => setBrand(e.target.value)}
 									className="form-control"
+									autoFocus
 									placeholder="Добавьте бренд..."
 								/>
 							</Form>
@@ -59,7 +54,7 @@ const CreateBrand = ({ show, onHide }) => {
 								type="button"
 								className="btn btn-secondary"
 								data-bs-dismiss="modal"
-								onClick={addClick}
+								onClick={onHide}
 							>
 								Закрыть
 							</button>

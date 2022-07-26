@@ -23,12 +23,12 @@ const BrandBar = () => {
 						? <div className="spinner-grow text-danger" role="status">
 							<span className="visually-hidden">Loading...</span>
 						</div>
-						: brands.length > 0 && brands.map((item, index) => {
+						: brands.length > 0 && brands.map((item) => {
 							return (
 								<div className={selectedBrand === item.id ? 'card p-3 active border-danger' : 'card p-3 active border-light'}
 									key={item.id}
 									style={{ width: "auto", marginRight: '10px', cursor: 'pointer' }}
-									onClick={() => setActive(index + 1)}
+									onClick={() => setActive(item.id)}
 								>
 									{item.name}
 								</div>

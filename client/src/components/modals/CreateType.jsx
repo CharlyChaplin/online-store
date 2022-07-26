@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Modal } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { createType, deleteType } from 'redux/deviceSlice';
 
 const CreateType = ({ show, onHide }) => {
@@ -20,7 +20,7 @@ const CreateType = ({ show, onHide }) => {
 		onHide();
 		const resp = await dispatch(deleteType(type));
 		if (resp.payload.message) {
-			alert(resp?.payload.message);
+			alert(resp.payload.message);
 		} else {
 			alert(resp.payload)
 		}
@@ -41,6 +41,7 @@ const CreateType = ({ show, onHide }) => {
 									value={type}
 									onChange={(e) => setType(e.target.value)}
 									className="form-control"
+									autoFocus
 									placeholder="Добавьте тип устройства..."
 								/>
 							</Form>

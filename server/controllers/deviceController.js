@@ -7,6 +7,8 @@ import ApiError from '../error/ApiError.js';
 class DeviceController {
 	async create(req, res, next) {
 		try {
+			console.log("req.body = ", req.body);
+			console.log("req.files = ", req.files);
 			let { name, price, brandId, typeId, info } = req.body;
 			const { img } = req.files;
 			let fileName = v4() + '.jpg';
@@ -15,7 +17,7 @@ class DeviceController {
 
 			const id = await Device.max('id') + 1;
 			const resp = await Device.sequelize.query(`ALTER SEQUENCE devices_id_seq RESTART WITH ${id}`);
-			
+
 			const device = await Device.create({
 				name,
 				price,
@@ -28,6 +30,10 @@ class DeviceController {
 				//когда данные вытягиваются из формы(в запросе), они передаются
 				//как строка. Поэтому парсим в объект
 				info = JSON.parse(info);
+
+				const id = await DeviceInfo.max('id') + 1;
+				const resp = await DeviceInfo.sequelize.query(`ALTER SEQUENCE device_infos_id_seq RESTART WITH ${id}`);
+				
 				info.forEach(i => {
 					DeviceInfo.create({
 						title: i.title,
@@ -92,14 +98,14 @@ class DeviceController {
 			});
 
 			if (!device) return next(ApiError.badRequest("Device not found"));
-			
+
 			const deviceDelete = await Device.destroy({ where: { id } });
 			if (deviceDelete) {
-				return res.json({message: "Deletion was successfully"});
+				return res.json({ message: "Deletion was successfully" });
 			} else {
 				return next(ApiError.badRequest("Fault while deletion"));
 			}
-			
+
 
 		} catch (err) {
 			return next(ApiError.badRequest(err.message));

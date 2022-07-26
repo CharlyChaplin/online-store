@@ -13,14 +13,16 @@ const DevicePage = () => {
 	const { id } = useParams();
 	const { deviceOne, deviceOneLoading, deviceOneLoadingErrorMessage } = useSelector(state => state.device);
 
-	const description = [
-		{id: 1, title: "Оперативная память", description: "5 Гб"},
-		{id: 2, title: "Камера", description: "12 Мп"},
-		{id: 3, title: "Процессор", description: "Pentium"},
-		{id: 4, title: "Кол-во ядер", description: "2"},
-		{id: 5, title: "Аккумулятор", description: "4 000 mA"}
-	]
-	
+	//console.log(deviceOne);
+
+	//const description = [
+	//	{ id: 1, title: "Оперативная память", description: "5 Гб" },
+	//	{ id: 2, title: "Камера", description: "12 Мп" },
+	//	{ id: 3, title: "Процессор", description: "Pentium" },
+	//	{ id: 4, title: "Кол-во ядер", description: "2" },
+	//	{ id: 5, title: "Аккумулятор", description: "4 000 mA" }
+	//]
+
 	useEffect(() => {
 		dispatch(getDeviceOne(id))
 	}, [])
@@ -35,15 +37,18 @@ const DevicePage = () => {
 					: <Container className='mt-5'>
 						<Row>
 							<Col md={4} className='d-flex flex-column align-items-center'>
-								<Image src={deviceOne.img} style={{ width: "150px" }} />
+								<Image src={`http://localhost:5000/${deviceOne.img}`} style={{ width: "150px" }} />
 								<div className='mt-3 d-flex flex-column'>
 									<span className='fs-4 align-self-center mb-4'>Характеристики:</span>
 									<ul className='p-0'>
-										{description.map(item => {
-											return (
-												<li className='mb-4' key={item.id}>{item.title}: {item.description}</li>
-											)
-										})}
+										{
+											deviceOne?.info &&
+											deviceOne.info.map(item => {
+												return (
+													<li className='mb-4' key={item.id}>{item.title}: {item.description}</li>
+												)
+											})
+										}
 									</ul>
 								</div>
 							</Col>
@@ -58,7 +63,7 @@ const DevicePage = () => {
 							<Col md={4}>
 								<Card className='d-flex flex-column align-items-center justify-content-around' style={{ width: "300px", height: "300px", fontSize: "32px", border: "5px solid lightgray" }}>
 									<h3>от: {formatter.format(deviceOne.price)} руб.</h3>
-									<button type="button" class="btn btn-outline-dark" style={{ marginTop: "100px", fontSize: "26px" }}>Добавить в корзину</button>
+									<button type="button" className="btn btn-outline-dark" style={{ marginTop: "100px", fontSize: "26px" }}>Добавить в корзину</button>
 								</Card>
 
 							</Col>

@@ -10,9 +10,11 @@ const DeviceList = () => {
 	const { devices, selectedDevice, deviceLoading, deviceLoadingErrorMessage } = useSelector(state => state.device);
 	const dispatch = useDispatch();
 
+	
 	useEffect(() => {
 		dispatch(getDevices());
 	}, [])
+	
 
 	return (
 		<>

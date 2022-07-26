@@ -72,6 +72,18 @@ export const getDeviceOne = createAsyncThunk(
 		}
 	}
 );
+export const createDevice = createAsyncThunk(
+	"device/createDevice",
+	async (formData, { rejectWithValue }) => {
+		try {
+			const { data } = await axios.post("api/device", formData);
+			return data;
+		} catch (err) {
+			if (err instanceof AxiosError)
+				return rejectWithValue(err.response.data.message);
+		}
+	}
+);
 export const createType = createAsyncThunk(
 	"device/createType",
 	async (newType, { rejectWithValue }) => {
@@ -203,6 +215,19 @@ export const deviceSlice = createSlice({
 			state.deviceOneLoadingErrorMessage = action.payload;
 		},
 
+		[createDevice.pending]: (state, action) => {
+			state.deviceLoading = true;
+			state.deviceLoadingErrorMessage = '';
+		},
+		[createDevice.fulfilled]: (state, action) => {
+			state.deviceLoading = false;
+			state.deviceLoadingErrorMessage = '';
+		},
+		[createDevice.rejected]: (state, action) => {
+			state.deviceLoading = false;
+			state.deviceLoadingErrorMessage = action.payload;
+		},
+		
 		[createType.pending]: (state, action) => {
 			state.typesLoading = true;
 			state.typesLoadingErrorMessage = '';
@@ -228,7 +253,7 @@ export const deviceSlice = createSlice({
 			state.typesLoading = false;
 			state.typesLoadingErrorMessage = action.payload;
 		},
-		
+
 		[createBrand.pending]: (state, action) => {
 			state.brandsLoading = true;
 			state.brandsLoadingErrorMessage = '';
@@ -241,7 +266,7 @@ export const deviceSlice = createSlice({
 			state.brandsLoading = false;
 			state.brandsLoadingErrorMessage = action.payload;
 		},
-		
+
 		[deleteBrand.pending]: (state, action) => {
 			state.brandsLoading = true;
 			state.brandsLoadingErrorMessage = '';
