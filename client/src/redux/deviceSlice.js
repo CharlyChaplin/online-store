@@ -71,7 +71,59 @@ export const getDeviceOne = createAsyncThunk(
 				return rejectWithValue(err.response.data.message);
 		}
 	}
-)
+);
+export const createType = createAsyncThunk(
+	"device/createType",
+	async (newType, { rejectWithValue }) => {
+		try {
+			const { data } = await axios.post('api/type', { name: newType });
+			return data;
+		} catch (err) {
+			if (err instanceof AxiosError)
+				return rejectWithValue(err.response.data.message);
+		}
+	}
+);
+export const deleteType = createAsyncThunk(
+	"device/deleteType",
+	async (deleteType, { rejectWithValue }) => {
+		try {
+			const { data } = await axios.delete('api/type', {
+				data: { name: deleteType }
+			});
+			return data;
+		} catch (err) {
+			if (err instanceof AxiosError)
+				return rejectWithValue(err.response.data.message);
+		}
+	}
+);
+export const createBrand = createAsyncThunk(
+	"device/createBrand",
+	async (newBrand, { rejectWithValue }) => {
+		try {
+			const { data } = await axios.post('api/brand', { name: newBrand });
+			return data;
+		} catch (err) {
+			if (err instanceof AxiosError)
+				return rejectWithValue(err.response.data.message);
+		}
+	}
+);
+export const deleteBrand = createAsyncThunk(
+	"device/deleteBrand",
+	async (deleteBrand, { rejectWithValue }) => {
+		try {
+			const { data } = await axios.delete('api/brand', {
+				data: { name: deleteBrand }
+			});
+			return data;
+		} catch (err) {
+			if (err instanceof AxiosError)
+				return rejectWithValue(err.response.data.message);
+		}
+	}
+);
 
 
 export const deviceSlice = createSlice({
@@ -134,7 +186,7 @@ export const deviceSlice = createSlice({
 			state.deviceLoading = false;
 			state.deviceLoadingErrorMessage = action.payload;
 		},
-		
+
 		[getDeviceOne.pending]: (state, action) => {
 			state.deviceOne = [];
 			state.deviceOneLoading = true;
@@ -149,6 +201,58 @@ export const deviceSlice = createSlice({
 			state.deviceOne = [];
 			state.deviceOneLoading = false;
 			state.deviceOneLoadingErrorMessage = action.payload;
+		},
+
+		[createType.pending]: (state, action) => {
+			state.typesLoading = true;
+			state.typesLoadingErrorMessage = '';
+		},
+		[createType.fulfilled]: (state, action) => {
+			state.typesLoading = false;
+			state.typesLoadingErrorMessage = '';
+		},
+		[createType.rejected]: (state, action) => {
+			state.typesLoading = false;
+			state.typesLoadingErrorMessage = action.payload;
+		},
+
+		[deleteType.pending]: (state, action) => {
+			state.typesLoading = true;
+			state.typesLoadingErrorMessage = '';
+		},
+		[deleteType.fulfilled]: (state, action) => {
+			state.typesLoading = false;
+			state.typesLoadingErrorMessage = '';
+		},
+		[deleteType.rejected]: (state, action) => {
+			state.typesLoading = false;
+			state.typesLoadingErrorMessage = action.payload;
+		},
+		
+		[createBrand.pending]: (state, action) => {
+			state.brandsLoading = true;
+			state.brandsLoadingErrorMessage = '';
+		},
+		[createBrand.fulfilled]: (state, action) => {
+			state.brandsLoading = false;
+			state.brandsLoadingErrorMessage = '';
+		},
+		[createBrand.rejected]: (state, action) => {
+			state.brandsLoading = false;
+			state.brandsLoadingErrorMessage = action.payload;
+		},
+		
+		[deleteBrand.pending]: (state, action) => {
+			state.brandsLoading = true;
+			state.brandsLoadingErrorMessage = '';
+		},
+		[deleteBrand.fulfilled]: (state, action) => {
+			state.brandsLoading = false;
+			state.brandsLoadingErrorMessage = '';
+		},
+		[deleteBrand.rejected]: (state, action) => {
+			state.brandsLoading = false;
+			state.brandsLoadingErrorMessage = action.payload;
 		},
 	}
 });

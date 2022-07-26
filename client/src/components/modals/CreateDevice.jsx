@@ -4,21 +4,28 @@ import { Button, Col, Dropdown, Form, Modal, Row } from 'react-bootstrap';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
 import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getBrands, getTypes } from 'redux/deviceSlice';
 
 const CreateDevice = ({ show, onHide }) => {
-	const {brands, types} = useSelector(state => state.device);
+	const { brands, types, typesLoading } = useSelector(state => state.device);
 	const [info, setInfo] = useState([]);
-	
-	
+	const dispatch = useDispatch();
+
+
 	const addInfo = () => {
-		setInfo([...info, {title: '', description: '', number: Date.now()}]);
+		setInfo([...info, { title: '', description: '', number: Date.now() }]);
 	}
-	
+
 	const deleteInfo = (number) => {
 		setInfo(info.filter(i => i.number !== number));
 	}
-	
+
+	const fetchTypesBrands = () => {
+		dispatch(getTypes());
+		dispatch(getBrands());
+	}
+
 	return (
 		<>
 			<Modal
@@ -27,6 +34,7 @@ const CreateDevice = ({ show, onHide }) => {
 				centered
 				backdrop={'static'}
 				keyboard={false}
+				onShow={() => fetchTypesBrands()}
 			>
 				<div className="modal-dialog">
 					<div className="modal-content">
@@ -39,13 +47,20 @@ const CreateDevice = ({ show, onHide }) => {
 									<DropdownToggle>Выберите тип устройства</DropdownToggle>
 									<DropdownMenu>
 										{
-											types &&
-											types.length > 0 &&
-											types.map(item => {
-												return (
-													<DropdownItem key={item.id}>{item.name}</DropdownItem>
-												)
-											})
+											!typesLoading
+												? types.length > 0 && types.map(item => {
+													return (
+														<DropdownItem key={item.id}>{item.name}</DropdownItem>
+													)
+												})
+												: [3].map((item, index) => {
+													return (
+														<div className="spinner-grow text-danger" role="status" key={index}>
+															<span className="visually-hidden">Loading...</span>
+														</div>
+													)
+												})
+
 										}
 									</DropdownMenu>
 								</Dropdown>
@@ -72,10 +87,10 @@ const CreateDevice = ({ show, onHide }) => {
 								</Button>
 								{
 									info.map(item => {
-										return(
+										return (
 											<Row className='mt-4' key={item.number}>
 												<Col md={4}>
-													<Form.Control placeholder='Введите название устройства'/>
+													<Form.Control placeholder='Введите название устройства' />
 												</Col>
 												<Col md={4}>
 													<Form.Control placeholder='Введите описание устройства' />

@@ -1,20 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { Dropdown, Form, Modal } from 'react-bootstrap';
-import DropdownItem from 'react-bootstrap/esm/DropdownItem';
-import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
-import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
+import { Form, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBrands } from 'redux/deviceSlice';
+import { createBrand, deleteBrand, getBrands } from 'redux/deviceSlice';
 
 
 const CreateBrand = ({ show, onHide }) => {
-	const { brands } = useSelector(state => state.device);
+	const [brand, setBrand] = useState('');
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		dispatch(getBrands());
-	}, [])
+	
+	const addClick = async () => {
+		onHide();
+		const resp = await dispatch(createBrand(brand));
+		if (resp.payload.id) {
+			alert("Новый бренд добавлен");
+		} else {
+			alert(resp.payload);
+		}
+	}
+	const deleteClick = async () => {
+		onHide();
+		const resp = await dispatch(deleteBrand(brand));
+		if (resp.payload.message) {
+			alert(resp?.payload.message);
+		} else {
+			alert(resp.payload)
+		}
+	}
 
 
 	return (
@@ -32,20 +45,13 @@ const CreateBrand = ({ show, onHide }) => {
 						</div>
 						<div className="modal-body">
 							<Form>
-								<Dropdown>
-									<DropdownToggle>Выберите бренд</DropdownToggle>
-									<DropdownMenu>
-										{
-											brands &&
-											brands.length > 0 &&
-											brands.map(item => {
-												return (
-													<DropdownItem key={item.id}>{item.name}</DropdownItem>
-												)
-											})
-										}
-									</DropdownMenu>
-								</Dropdown>
+								<input
+									type="text"
+									value={brand}
+									onChange={(e) => setBrand(e.target.value)}
+									className="form-control"
+									placeholder="Добавьте бренд..."
+								/>
 							</Form>
 						</div>
 						<div className="modal-footer">
@@ -53,16 +59,23 @@ const CreateBrand = ({ show, onHide }) => {
 								type="button"
 								className="btn btn-secondary"
 								data-bs-dismiss="modal"
-								onClick={onHide}
+								onClick={addClick}
 							>
 								Закрыть
 							</button>
 							<button
 								type="button"
 								className="btn btn-primary"
-								onClick={onHide}
+								onClick={addClick}
 							>
 								Добавить
+							</button>
+							<button
+								type="button"
+								className="btn btn-primary"
+								onClick={deleteClick}
+							>
+								Удалить
 							</button>
 						</div>
 					</div>
