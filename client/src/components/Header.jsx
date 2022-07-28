@@ -6,6 +6,7 @@ import { LOGIN_ROUTE, SHOP_ROUTE, ADMIN_ROUTE, CART_ROUTE } from '../utils/const
 import jwt from 'jsonwebtoken';
 import cartICO from 'assets/img/cart.png';
 import { Image } from 'react-bootstrap';
+import Spinner from './Spinner.jsx';
 
 
 const Header = () => {
@@ -49,9 +50,7 @@ const Header = () => {
 	const out = (isAuth, isLoading) => {
 		if (isLoading) {
 			return (
-				<div className="spinner-grow text-danger" role="status">
-					<span className="visually-hidden">Loading...</span>
-				</div>
+				<Spinner />
 			)
 		} else {
 			if (isAuth) {

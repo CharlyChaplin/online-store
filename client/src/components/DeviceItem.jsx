@@ -8,25 +8,31 @@ import { useSelector } from 'react-redux';
 
 
 const DeviceItem = ({ device }) => {
-	const {types, brands} = useSelector(state => state.device);
+	const { types, brands } = useSelector(state => state.device);
 	const navigate = useNavigate();
 	
-
-	return (
+	
+		return (
 		<>
 			{
 				<Col md={3} className="mt-3">
 					<Card style={{ cursor: 'pointer' }} onClick={() => navigate(`${DEVICE_ROUTE}/${device.id}`)}>
-						<Image src={`http://localhost:5000/${device.img}`} className="card-img-top" alt={device.name} style={{ width: "150px", height: "150px" }} />
+						<Image src={`${process.env.REACT_APP_SERVER_ADR}/${device.img}`} className="card-img-top" alt={device.name} style={{ width: "150px", height: "150px" }} />
 						<div className="card-body">
 							<h5 className="card-title text-black-50 root">
-								<span>{types.filter(m => m.id === device.typeId)[0].name}</span>
+								<span>
+									{
+										types && types.length > 0 && types.find(m => m.id === device.typeId).name
+									}
+								</span>
 								&nbsp;
 								<span>{device.name}</span>
 
 							</h5>
 							<h5 className="card-title">
-								{brands.filter(m => m.id === device.brandId)[0].name}
+								{
+									brands && brands.length > 0 && brands.find(m => m.id === device.brandId).name
+								}
 							</h5>
 							<h6 className="card-title" style={{ fontWeight: "bold" }}>{formatter.format(device.price)} руб.</h6>
 							<h5 className="d-flex justify-content-end align-items-end">

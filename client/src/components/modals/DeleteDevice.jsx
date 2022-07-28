@@ -1,47 +1,42 @@
 import { nanoid } from '@reduxjs/toolkit';
 import Spinner from 'components/Spinner';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { Dropdown, Form, Modal } from 'react-bootstrap';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
 import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
 import { useDispatch, useSelector } from 'react-redux';
-import { createType, deleteType, getTypes } from 'redux/deviceSlice';
+import { deleteDevice, getDevices } from 'redux/deviceSlice';
 
-const CreateType = ({ show, onHide }) => {
-	const [type, setType] = useState('');
-	const dispatch = useDispatch();
-	const { types, typesLoading } = useSelector(state => state.device);
+const DeleteDevice = ({ show, onHide }) => {
+	const { devices, deviceLoading } = useSelector(state => state.device);
+	const [device, setDevice] = useState('');
 	const [check, setCheck] = useState(false);
 	const [expanded, setExpanded] = useState(false);
 	const [inputMode, setInputMode] = useState(true);
+	const dispatch = useDispatch();
 
-	const handleExpand = () => {
-		setExpanded(!expanded);
-		if (!expanded) dispatch(getTypes());
-	}
-	const showAllTypes = (e) => {
-		setCheck(e.target.checked);
-		setInputMode(!e.target.checked);
-	}
 
-	const addClick = async () => {
-		onHide();
-		const resp = await dispatch(createType(type));
-		if (resp.payload.id) {
-			alert("Новый тип добавлен");
-		} else {
-			alert(resp.payload);
-		}
-	}
+	
 	const deleteClick = async () => {
 		onHide();
-		const resp = await dispatch(deleteType(type));
+		const deleteId = devices.find(item => item.name === device).id;
+		const resp = await dispatch(deleteDevice(deleteId));
 		if (resp.payload.message) {
 			alert(resp.payload.message);
 		} else {
 			alert(resp.payload)
 		}
+	}
+	
+	const handleExpand = () => {
+		setExpanded(!expanded);
+		if (!expanded) dispatch(getDevices());
+	}
+	const showAllDevices = (e) => {
+		setCheck(e.target.checked);
+		setInputMode(!e.target.checked);
 	}
 
 	return (
@@ -50,7 +45,7 @@ const CreateType = ({ show, onHide }) => {
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">
-							<h5 className="modal-title">Добавить новый тип</h5>
+							<h5 className="modal-title">Название удаляемого устройства</h5>
 						</div>
 						<div className="modal-body">
 							<Form>
@@ -59,22 +54,22 @@ const CreateType = ({ show, onHide }) => {
 										?
 										<input
 											type="text"
-											value={type}
-											onChange={(e) => setType(e.target.value)}
+											value={device}
+											onChange={(e) => setDevice(e.target.value)}
 											className="form-control"
 											autoFocus
-											placeholder="Добавьте тип устройства..."
+											placeholder="Введите название..."
 										/>
 										: <Dropdown show={expanded} onClick={handleExpand}>
-											<DropdownToggle>{!type && 'Выберите тип устройства' || type}</DropdownToggle>
+											<DropdownToggle>{!device && 'Выберите устройство' || device}</DropdownToggle>
 											<DropdownMenu>
 												{
-													!typesLoading
-														? types &&
-														types.length > 0 &&
-														types.map(item => {
+													!deviceLoading
+														? devices &&
+														devices.length > 0 &&
+														devices.map(item => {
 															return (
-																<DropdownItem key={item.id} onClick={() => setType(item.name)}>{item.name}</DropdownItem>
+																<DropdownItem key={item.id} onClick={() => setDevice(item.name)}>{item.name}</DropdownItem>
 															)
 														})
 														: [3].map(() => {
@@ -92,7 +87,7 @@ const CreateType = ({ show, onHide }) => {
 										type="checkbox"
 										id="flexCheckDefault"
 										style={{ marginTop: "2px" }}
-										onChange={showAllTypes}
+										onChange={showAllDevices}
 										checked={check}
 									/>
 									<label className="form-check-label" style={{ marginLeft: "10px", height: "100%" }} htmlFor="flexCheckDefault">
@@ -113,13 +108,6 @@ const CreateType = ({ show, onHide }) => {
 							<button
 								type="button"
 								className="btn btn-primary"
-								onClick={addClick}
-							>
-								Добавить
-							</button>
-							<button
-								type="button"
-								className="btn btn-primary"
 								onClick={deleteClick}
 							>
 								Удалить
@@ -132,4 +120,4 @@ const CreateType = ({ show, onHide }) => {
 	);
 }
 
-export default CreateType;
+export default DeleteDevice;

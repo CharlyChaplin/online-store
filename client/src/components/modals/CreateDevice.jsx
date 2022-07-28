@@ -1,3 +1,5 @@
+import { nanoid } from '@reduxjs/toolkit';
+import Spinner from 'components/Spinner';
 import React from 'react';
 import { useState } from 'react';
 import { Button, Col, Dropdown, Form, Modal, Row } from 'react-bootstrap';
@@ -9,7 +11,7 @@ import { createDevice, getBrands, getTypes } from 'redux/deviceSlice';
 
 
 const CreateDevice = ({ show, onHide }) => {
-	const { brands, types, typesLoading, deviceLoading, deviceLoadingErrorMessage} = useSelector(state => state.device);
+	const { brands, types, typesLoading, brandsLoading } = useSelector(state => state.device);
 	const [type, setType] = useState(0);
 	const [brand, setBrand] = useState(0);
 	const [nameDevice, setNameDevice] = useState('');
@@ -80,16 +82,16 @@ const CreateDevice = ({ show, onHide }) => {
 									<DropdownMenu>
 										{
 											!typesLoading
-												? types.length > 0 && types.map(item => {
+												? types &&
+												types.length > 0 &&
+												types.map(item => {
 													return (
 														<DropdownItem key={item.id} onClick={() => setType(item)}>{item.name}</DropdownItem>
 													)
 												})
 												: [3].map((_, index) => {
 													return (
-														<div className="spinner-grow text-danger" role="status" key={index}>
-															<span className="visually-hidden">Loading...</span>
-														</div>
+														<Spinner key={nanoid()} />
 													)
 												})
 
@@ -100,13 +102,19 @@ const CreateDevice = ({ show, onHide }) => {
 									<DropdownToggle>{brand?.name || 'Выберите бренд'}</DropdownToggle>
 									<DropdownMenu>
 										{
-											brands &&
-											brands.length > 0 &&
-											brands.map(item => {
-												return (
-													<DropdownItem key={item.id} onClick={() => setBrand(item)}>{item.name}</DropdownItem>
-												)
-											})
+											!brandsLoading
+												? brands &&
+												brands.length > 0 &&
+												brands.map(item => {
+													return (
+														<DropdownItem key={item.id} onClick={() => setBrand(item)}>{item.name}</DropdownItem>
+													)
+												})
+												: [3].map(() => {
+													return (
+														<Spinner key={nanoid()}/>
+													)
+												})
 										}
 									</DropdownMenu>
 								</Dropdown>

@@ -84,6 +84,20 @@ export const createDevice = createAsyncThunk(
 		}
 	}
 );
+export const deleteDevice = createAsyncThunk(
+	"device/deleteType",
+	async (deleteDeviceId, { rejectWithValue }) => {
+		try {
+			const { data } = await axios.delete('api/device/delete', {
+				data: { id: deleteDeviceId }
+			});
+			return data;
+		} catch (err) {
+			if (err instanceof AxiosError)
+				return rejectWithValue(err.response.data.message);
+		}
+	}
+);
 export const createType = createAsyncThunk(
 	"device/createType",
 	async (newType, { rejectWithValue }) => {
@@ -224,6 +238,19 @@ export const deviceSlice = createSlice({
 			state.deviceLoadingErrorMessage = '';
 		},
 		[createDevice.rejected]: (state, action) => {
+			state.deviceLoading = false;
+			state.deviceLoadingErrorMessage = action.payload;
+		},
+		
+		[deleteDevice.pending]: (state, action) => {
+			state.deviceLoading = true;
+			state.deviceLoadingErrorMessage = '';
+		},
+		[deleteDevice.fulfilled]: (state, action) => {
+			state.deviceLoading = false;
+			state.deviceLoadingErrorMessage = '';
+		},
+		[deleteDevice.rejected]: (state, action) => {
 			state.deviceLoading = false;
 			state.deviceLoadingErrorMessage = action.payload;
 		},

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBrands, setSelectedBrand } from 'redux/deviceSlice';
+import Spinner from './Spinner';
 
 
 const BrandBar = () => {
@@ -20,10 +21,10 @@ const BrandBar = () => {
 			<div className="row" style={{ display: 'flex', flexDirection: 'row' }}>
 				{
 					brandsLoading
-						? <div className="spinner-grow text-danger" role="status">
-							<span className="visually-hidden">Loading...</span>
-						</div>
-						: brands.length > 0 && brands.map((item) => {
+						? <Spinner />
+						: brands &&
+						brands.length > 0 &&
+						brands.map((item) => {
 							return (
 								<div className={selectedBrand === item.id ? 'card p-3 active border-danger' : 'card p-3 active border-light'}
 									key={item.id}
@@ -34,6 +35,7 @@ const BrandBar = () => {
 								</div>
 							)
 						})
+						|| <div>No Brands</div>
 				}
 			</div>
 		</>
