@@ -17,7 +17,6 @@ const CreateBrand = ({ show, onHide }) => {
 	const [expanded, setExpanded] = useState(false);
 	const [inputMode, setInputMode] = useState(true);
 
-
 	const handleExpand = () => {
 		setExpanded(!expanded);
 		if (!expanded) dispatch(getBrands());
@@ -29,11 +28,15 @@ const CreateBrand = ({ show, onHide }) => {
 
 	const addClick = async () => {
 		onHide();
-		const resp = await dispatch(createBrand(brand));
-		if (resp.payload.id) {
-			alert("Новый бренд добавлен");
+		if (brand.length > 0) {
+			const resp = await dispatch(createBrand(brand));
+			if (resp.payload.id) {
+				alert("Новый бренд добавлен");
+			} else {
+				alert(resp.payload);
+			}
 		} else {
-			alert(resp.payload);
+			alert("Поле не может быть пустым")
 		}
 	}
 	const deleteClick = async () => {

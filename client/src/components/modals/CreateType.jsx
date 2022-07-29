@@ -27,11 +27,16 @@ const CreateType = ({ show, onHide }) => {
 
 	const addClick = async () => {
 		onHide();
-		const resp = await dispatch(createType(type));
-		if (resp.payload.id) {
-			alert("Новый тип добавлен");
+		if (type.length > 0) {
+			const resp = await dispatch(createType(type));
+			if (resp.payload.id) {
+				alert("Новый тип добавлен");
+			} else {
+				alert(resp.payload);
+			}
 		} else {
-			alert(resp.payload);
+			console.log("Empty");
+			alert("Поле не может быть пустым")
 		}
 	}
 	const deleteClick = async () => {

@@ -20,14 +20,7 @@ const DeviceItem = ({ device }) => {
 						<Image src={`${process.env.REACT_APP_SERVER_ADR}/${device.img}`} className="card-img-top" alt={device.name} style={{ width: "150px", height: "150px" }} />
 						<div className="card-body">
 							<h5 className="card-title text-black-50 root">
-								<span>
-									{
-										types && types.length > 0 && types.find(m => m.id === device.typeId).name
-									}
-								</span>
-								&nbsp;
 								<span>{device.name}</span>
-
 							</h5>
 							<h5 className="card-title">
 								{
