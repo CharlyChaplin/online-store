@@ -33,7 +33,7 @@ class DeviceController {
 
 				const id = await DeviceInfo.max('id') + 1;
 				const resp = await DeviceInfo.sequelize.query(`ALTER SEQUENCE device_infos_id_seq RESTART WITH ${id}`);
-				
+
 				info.forEach(i => {
 					DeviceInfo.create({
 						title: i.title,
@@ -57,16 +57,16 @@ class DeviceController {
 		let device;
 		try {
 			if (typeId && brandId) {
-				device = await Device.findAndCountAll({ where: { typeId, brandId, limit, offset } });
+				device = await Device.findAndCountAll({ where: { typeId, brandId }, limit, offset });
 			}
 			if (!typeId && !brandId) {
 				device = await Device.findAndCountAll({ limit, offset });
 			}
 			if (!typeId && brandId) {
-				device = await Device.findAndCountAll({ where: { brandId, limit, offset } });
+				device = await Device.findAndCountAll({ where: { brandId }, limit, offset });
 			}
 			if (typeId && !brandId) {
-				device = await Device.findAndCountAll({ where: { typeId, limit, offset } });
+				device = await Device.findAndCountAll({ where: { typeId }, limit, offset });
 			}
 			return res.json(device);
 		} catch (err) {
