@@ -33,6 +33,11 @@ const CreateDevice = ({ show, onHide }) => {
 		setInfo(info.map(i => i.number === number ? { ...i, [key]: value } : i));
 	}
 
+	const notInfoEmpty = () => {
+		const result = info.filter(i => Object.keys(i).filter(m => i[m].length === 0).length)
+		return Boolean(!result.length);
+	}
+	
 	const addDevice = async () => {
 		const formData = new FormData();
 		formData.append('name', nameDevice);
@@ -40,7 +45,12 @@ const CreateDevice = ({ show, onHide }) => {
 		formData.append('img', file);
 		formData.append('brandId', brand.id);
 		formData.append('typeId', type.id);
-		formData.append('info', JSON.stringify(info));
+		if (info.length > 0 && notInfoEmpty()) {
+			formData.append('info', JSON.stringify(info));
+		} else {
+			alert("Заполните все поля свойств");
+			return
+		}
 		const resp = await dispatch(createDevice(formData));
 		if (resp.payload.id) {
 			alert("Новое устройство добавлено");
@@ -112,7 +122,7 @@ const CreateDevice = ({ show, onHide }) => {
 												})
 												: [3].map(() => {
 													return (
-														<Spinner key={nanoid()}/>
+														<Spinner key={nanoid()} />
 													)
 												})
 										}

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTypes, setSelectedType } from 'redux/deviceSlice';
+import { getTypes, setLimit, setPage, setSelectedType } from 'redux/deviceSlice';
 import Spinner from './Spinner';
 
 
 const TypeBar = () => {
-	const { types, selectedType, typesLoading, typesLoadingErrorMessage } = useSelector(state => state.device);
+	const { types, selectedType, typesLoading } = useSelector(state => state.device);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -14,6 +14,7 @@ const TypeBar = () => {
 
 	const setActive = (i) => {
 		dispatch(setSelectedType(i));
+		dispatch(setPage(1));
 	}
 
 
@@ -28,9 +29,9 @@ const TypeBar = () => {
 						types.map((item, index) => {
 							return (
 								<li
-									className={selectedType === index ? "list-group-item active p-4 fs-4" : "list-group-item p-4 fs-4"}
+									className={selectedType === item.id ? "list-group-item active p-4 fs-4" : "list-group-item p-4 fs-4"}
 									key={item.id}
-									onClick={() => setActive(index)}
+									onClick={() => setActive(index + 1)}
 									style={{ cursor: 'pointer' }}
 								>
 									{item.name}

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBrands, setSelectedBrand } from 'redux/deviceSlice';
+import { getBrands, setPage, setSelectedBrand } from 'redux/deviceSlice';
 import Spinner from './Spinner';
 
 
 const BrandBar = () => {
-	const { brands, selectedBrand, brandsLoading, brandsLoadingErrorMessage } = useSelector(state => state.device);
+	const { brands, selectedBrand, brandsLoading } = useSelector(state => state.device);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -14,6 +14,7 @@ const BrandBar = () => {
 
 	const setActive = (i) => {
 		dispatch(setSelectedBrand(i));
+		dispatch(setPage(1));
 	}
 
 	return (
@@ -24,7 +25,7 @@ const BrandBar = () => {
 						? <Spinner />
 						: brands &&
 						brands.length > 0 &&
-						brands.map((item) => {
+						brands.map(item => {
 							return (
 								<div className={selectedBrand === item.id ? 'card p-3 active border-danger' : 'card p-3 active border-light'}
 									key={item.id}

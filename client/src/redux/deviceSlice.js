@@ -4,12 +4,12 @@ import axios from '../axios.js';
 
 const initialState = {
 	types: [],
-	selectedType: {},
+	selectedType: null,
 	typesLoading: false,
 	typesLoadingErrorMessage: '',
 
 	brands: [],
-	selectedBrand: 1,
+	selectedBrand: null,
 	brandsLoading: false,
 	brandsLoadingErrorMessage: '',
 
@@ -21,7 +21,10 @@ const initialState = {
 
 	deviceOne: {},
 	deviceOneLoading: false,
-	deviceOneLoadingErrorMessage: ''
+	deviceOneLoadingErrorMessage: '',
+
+	page: 1,
+	limit: 4
 }
 
 export const getTypes = createAsyncThunk(
@@ -50,9 +53,17 @@ export const getBrands = createAsyncThunk(
 );
 export const getDevices = createAsyncThunk(
 	"device/getDevices",
-	async (_, { rejectWithValue }) => {
+	async ({ selectedType, selectedBrand, page, limit = initialState.limit }, { rejectWithValue }) => {
+		console.log("Async: 'page = '", page);
 		try {
-			const { data } = await axios.get('api/device');
+			const { data } = await axios.get('api/device', {
+				params: {
+					typeId: selectedType,
+					brandId: selectedBrand,
+					page,
+					limit
+				}
+			});
 			return data;
 		} catch (err) {
 			if (err instanceof AxiosError)
@@ -60,6 +71,7 @@ export const getDevices = createAsyncThunk(
 		}
 	}
 );
+
 export const getDeviceOne = createAsyncThunk(
 	"device/getDeviceOne",
 	async (id, { rejectWithValue }) => {
@@ -162,6 +174,16 @@ export const deviceSlice = createSlice({
 		setSelectedBrand: (state, action) => {
 			state.selectedBrand = action.payload
 		},
+		setPage: (state, action) => {
+			state.page = action.payload
+		},
+		setLimit: (state, action) => {
+			state.limit = action.payload
+		},
+		resetFilter: (state, action) => {
+			state.selectedType = null
+			state.selectedBrand = null
+		}
 	},
 	extraReducers: {
 		[getTypes.pending]: (state, action) => {
@@ -241,7 +263,7 @@ export const deviceSlice = createSlice({
 			state.deviceLoading = false;
 			state.deviceLoadingErrorMessage = action.payload;
 		},
-		
+
 		[deleteDevice.pending]: (state, action) => {
 			state.deviceLoading = true;
 			state.deviceLoadingErrorMessage = '';
@@ -254,7 +276,7 @@ export const deviceSlice = createSlice({
 			state.deviceLoading = false;
 			state.deviceLoadingErrorMessage = action.payload;
 		},
-		
+
 		[createType.pending]: (state, action) => {
 			state.typesLoading = true;
 			state.typesLoadingErrorMessage = '';
@@ -310,5 +332,5 @@ export const deviceSlice = createSlice({
 });
 
 
-export const { setSelectedType, setSelectedBrand } = deviceSlice.actions;
+export const { setSelectedType, setSelectedBrand, setPage, setLimit, resetFilter } = deviceSlice.actions;
 export default deviceSlice.reducer;

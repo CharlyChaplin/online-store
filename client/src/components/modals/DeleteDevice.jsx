@@ -1,7 +1,6 @@
 import { nanoid } from '@reduxjs/toolkit';
 import Spinner from 'components/Spinner';
 import React, { useState } from 'react';
-import { useEffect } from 'react';
 import { Dropdown, Form, Modal } from 'react-bootstrap';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
@@ -32,7 +31,7 @@ const DeleteDevice = ({ show, onHide }) => {
 	
 	const handleExpand = () => {
 		setExpanded(!expanded);
-		if (!expanded) dispatch(getDevices());
+		if (!expanded) dispatch(getDevices({}));
 	}
 	const showAllDevices = (e) => {
 		setCheck(e.target.checked);
