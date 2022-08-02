@@ -4,20 +4,33 @@ import { Card, Col, Container, Image, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getDeviceOne } from 'redux/deviceSlice';
-import { typesEnum, brandsEnum, formatter } from 'utils/consts';
+import { formatter } from 'utils/consts';
 import icon from 'assets/img/star-big.png';
 import Spinner from 'components/Spinner';
+import { addToCart } from 'redux/cartSlice';
 
 
 const DevicePage = () => {
 	const dispatch = useDispatch();
 	const { id } = useParams();
-	const { deviceOne, deviceOneLoading } = useSelector(state => state.device);
+	const { deviceOne, deviceOneLoading, devices } = useSelector(state => state.device);
+	const { cart } = useSelector(state => state.cart);
 
 
 	useEffect(() => {
-		dispatch(getDeviceOne(id))
-	}, [])
+		dispatch(getDeviceOne(id));
+	}, [cart])
+
+	const addClick = async () => {
+		const productAdd = devices.filter(item => item.id === deviceOne.id)[0];
+
+		const resp = await dispatch(addToCart(productAdd));
+		if (resp.payload.id === deviceOne.id) {
+			console.log("Добавлено");
+		} else {
+			console.log(resp.payload);
+		}
+	}
 
 	return (
 		<>
@@ -35,7 +48,14 @@ const DevicePage = () => {
 											deviceOne?.info &&
 											deviceOne.info.map(item => {
 												return (
-													<li className='mb-4' key={item.id}>{item.title}: {item.description}</li>
+													<li className='mb-4 d-flex align-items-center' key={item.id}>
+														<Col md={6} style={{marginRight: "20px"}}>
+															{item.title}:
+														</Col>
+														<Col md={6} style={{fontWeight: 'bold'}}>
+															{item.description}
+														</Col>
+													</li>
 												)
 											})
 										}
@@ -53,7 +73,13 @@ const DevicePage = () => {
 							<Col md={4}>
 								<Card className='d-flex flex-column align-items-center justify-content-around' style={{ width: "300px", height: "300px", fontSize: "32px", border: "5px solid lightgray" }}>
 									<h3>от: {formatter.format(deviceOne.price)} руб.</h3>
-									<button type="button" className="btn btn-outline-dark" style={{ marginTop: "100px", fontSize: "26px" }}>Добавить в корзину</button>
+									<button
+										type="button"
+										className="btn btn-outline-dark"
+										style={{ marginTop: "100px", fontSize: "26px" }}
+										onClick={addClick}
+									>Добавить в корзину
+									</button>
 								</Card>
 
 							</Col>

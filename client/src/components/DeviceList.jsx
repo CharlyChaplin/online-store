@@ -14,10 +14,8 @@ const DeviceList = () => {
 
 	useEffect(() => {
 		if (selectedType || selectedBrand) {
-			console.log("One");
 			dispatch(getDevices({ selectedType, selectedBrand, page, limit }));
 		} else {
-			console.log("Two");
 			dispatch(getDevices({page}));
 		}
 	}, [selectedType, selectedBrand, page]);

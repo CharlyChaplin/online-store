@@ -54,7 +54,6 @@ export const getBrands = createAsyncThunk(
 export const getDevices = createAsyncThunk(
 	"device/getDevices",
 	async ({ selectedType, selectedBrand, page, limit = initialState.limit }, { rejectWithValue }) => {
-		console.log("Async: 'page = '", page);
 		try {
 			const { data } = await axios.get('api/device', {
 				params: {
