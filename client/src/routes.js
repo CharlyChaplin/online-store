@@ -16,6 +16,7 @@ export const authRoutes = [
 
 export const publicRoutes = [
 	{ path: SHOP_ROUTE, element: <Shop /> },
+	{ path: CART_ROUTE, element: <Cart /> },
 	{ path: LOGIN_ROUTE, element: <Auth /> },
 	{ path: REGISTRATION_ROUTE, element: <Auth /> },
 	{ path: DEVICE_ROUTE + '/:id', element: <DevicePage /> }

@@ -62,20 +62,20 @@ const Header = () => {
 								<button
 									type="button"
 									className="btn btn-outline-light"
-									style={{marginRight: "10px"}}
+									style={{ marginRight: "10px" }}
 									onClick={() => navigate(ADMIN_ROUTE)}
 								>
 									Админ панель
 								</button>
-								<div
-									type="button"
-									style={{width: "36px", height: "36px"}}
-									onClick={() => navigate(CART_ROUTE)}
-								>
-									<Image src={cartICO} alt="Cart" />
-								</div>
 							</div>
 						}
+						<div
+							type="button"
+							style={{ width: "36px", height: "36px" }}
+							onClick={() => navigate(CART_ROUTE)}
+						>
+							<Image src={cartICO} alt="Cart" />
+						</div>
 						<button type="button" className="btn btn-outline-light ms-4" onClick={logout}>Выйти</button>
 					</>
 				)
